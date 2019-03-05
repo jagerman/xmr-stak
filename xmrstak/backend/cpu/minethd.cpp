@@ -439,6 +439,16 @@ bool minethd::self_test()
 			hashf("\x54\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74\x20\x54\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74\x20\x54\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74", 44, out, ctx, algo);
 			bResult = bResult &&  memcmp(out, "\xf7\x59\x58\x8a\xd5\x7e\x75\x84\x67\x29\x54\x43\xa9\xbd\x71\x49\x0a\xbf\xf8\xe9\xda\xd1\xb9\x5b\x6b\xf2\xf5\xd0\xd7\x83\x87\xbc", 32) == 0;
 		}
+		else if(algo == POW(cryptonight_v8_reversewaltz))
+		{
+			hashf = func_selector(::jconf::inst()->HaveHardwareAes(), false, algo);
+			hashf("This is a test This is a test This is a test", 44, out, ctx, algo);
+			bResult = memcmp(out, "\x32\xf7\x36\xec\x1d\x2f\x3f\xc5\x4c\x49\xbe\xb8\xa0\x47\x6c\xbf\xdd\x14\xc3\x51\xb9\xc6\xd7\x2c\x6f\x9f\xfc\xb5\x87\x5b\xe6\xb3", 32) == 0;
+
+			hashf = func_selector(::jconf::inst()->HaveHardwareAes(), true, algo);
+			hashf("This is a test This is a test This is a test", 44, out, ctx, algo);
+			bResult &= memcmp(out, "\x32\xf7\x36\xec\x1d\x2f\x3f\xc5\x4c\x49\xbe\xb8\xa0\x47\x6c\xbf\xdd\x14\xc3\x51\xb9\xc6\xd7\x2c\x6f\x9f\xfc\xb5\x87\x5b\xe6\xb3", 32) == 0;
+		}
 		else
 			printer::inst()->print_msg(L0,
 				"Cryptonight hash self-test NOT defined for POW %s", algo.Name().c_str());
@@ -580,6 +590,9 @@ void minethd::func_multi_selector(minethd::cn_hash_fun& hash_fun, minethd::cn_on
 	case cryptonight_r:
 		algv = 14;
 		break;
+	case cryptonight_v8_reversewaltz:
+		algv = 15;
+		break;
 	default:
 		algv = 2;
 		break;
@@ -659,7 +672,12 @@ void minethd::func_multi_selector(minethd::cn_hash_fun& hash_fun, minethd::cn_on
 		Cryptonight_hash<N>::template hash<cryptonight_r, false, false>,
 		Cryptonight_hash<N>::template hash<cryptonight_r, true, false>,
 		Cryptonight_hash<N>::template hash<cryptonight_r, false, true>,
-		Cryptonight_hash<N>::template hash<cryptonight_r, true, true>
+		Cryptonight_hash<N>::template hash<cryptonight_r, true, true>,
+
+		Cryptonight_hash<N>::template hash<cryptonight_v8_reversewaltz, false, false>,
+		Cryptonight_hash<N>::template hash<cryptonight_v8_reversewaltz, true, false>,
+		Cryptonight_hash<N>::template hash<cryptonight_v8_reversewaltz, false, true>,
+		Cryptonight_hash<N>::template hash<cryptonight_v8_reversewaltz, true, true>
 	};
 
 	std::bitset<2> digit;
