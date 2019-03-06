@@ -820,7 +820,7 @@ inline void cryptonight_conceal_tweak(__m128i& cx, __m128& conc_var)
 		ah0 += lo; \
 		al0 += hi; \
 	} \
-	if(ALGO == cryptonight_monero_v8 || ALGO == cryptonight_r || ALGO != cryptonight_r_wow || ALGO == cryptonight_v8_reversewaltz) \
+	if(ALGO == cryptonight_monero_v8 || ALGO == cryptonight_r || ALGO == cryptonight_r_wow || ALGO == cryptonight_v8_reversewaltz) \
 	{ \
 		bx1 = bx0; \
 		bx0 = cx; \
